@@ -5,9 +5,7 @@
 2. [What is REPLASTE?](#REPLASTE)
 3. [Technology](#Technology)
 4. [Installation](#Installation)
-5. [Database Configuration](#Database-Configuration)
-6. [Running the Project](#Running-the-Project)
-7. [API Endpoints](#API-Endpoints)
+5. [Deployment](#Deployment)
 
 
 ## Team ENTS-H1137 - CC
@@ -52,86 +50,24 @@ Python 3.9 or newer
 pip (package installer for Python)
 Virtual environment (optional but recommended)
 
-## Installation Steps
-
-1. Clone the Repository
-Clone the repository from GitHub to your computer.
-
-```bash
-git clone https://github.com/REPLASTE/Backend-ML.git
-cd Backend-ML
+## Deployment
+### 1. Create a Docker Image
+Run the following command to build the Docker image:
+```
+gcloud builds submit --tag gcr.io/my-firstproject-441503/plastic-classifier
 ```
 
-2. Create and Activate a Virtual Environment
-
+### 2. Deploy to Cloud Run
+Deploy the Docker image to Cloud Run using the following command:
 ```
-python -m venv .venv
+gcloud run deploy plastic-classifier \
+  --image gcr.io/replaste-442106/plastic-classifier \
+  --platform managed \
+  --region asia-southeast2 \
+  --allow-unauthenticated \
+  --memory 2Gi \
+  --cpu 2 \
+  --timeout 3600 \
+  --set-env-vars="DB_HOST=your_db_ip,DB_USER=your_db_user,DB_PASS=your_db_pass,DB_NAME=your_db_name"
 ```
-
-- Windows:
-
-```
-.venv\Scripts\activate
-```
-
-- Linux & MacOS:
-
-```
-source .venv/bin/activate
-```
-
-3. Install Dependencies
-
-```
-pip install -r requirements.txt
-```
-4. Ensure Model and Data Availability
-Make sure the model file (model.h5) is available in the project's root directory.
-
-5. Run the Application
-Run the Flask application using the following command:
-
-```bash
-python local.py
-```
-
-Open your browser and go to http://0.0.0.0:8080 to check the API.
-
-## API Endpoints
-
-Predict
-This endpoint is used to upload an image and get a prediction.
-
-URL: /predict
-Method: POST
-Content-Type: multipart/form-data
-Form Data:
-image: File gambar (jpg, jpeg, png)
-
-## Usage
-
-Use the /predict endpoint to make predictions based on the input image.
-
-```
-curl -X POST -F "image=@path/to/your/image.jpg" http://0.0.0.0:8080/predict
-```
-
-Replace path/to/your/image.jpg with the path to the image file you want to predict.
-
-## Example Response
-
-```
-{
-    "confidence": "94.24%",
-    "plastic_info": {
-        "Description": "LDPE adalah plastik fleksibel yang sering digunakan untuk kantong plastik dan film pembungkus.",
-        "name": "Low-Density Polyethylene (LDPE)",
-        "recycling_symbol": "4",
-        "recycling_time": "10-100 tahun,
-        "uses": [
-            "kantong plastik"
-            "film pembungkus"
-            "Lapisan karton minuman"
-        ]
-}
-```
+Make sure to replace your_db_ip, your_db_user, your_db_pass, and your_db_name with your actual database credentials.
