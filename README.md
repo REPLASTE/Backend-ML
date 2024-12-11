@@ -39,7 +39,7 @@ Python-dotenv           : A library used to load environment variables from a .e
 
 io                      : A module for handling the byte streams, used to manage in-memory binary streams.
 
-# Installation and Usage of Flask Application
+## Installation and Usage of Flask Application
 
 This application uses Flask as a web framework to create an image prediction API using a TensorFlow model. Several dependencies must be installed before running the application.
 
